@@ -2,7 +2,7 @@
 Centralizar la gestión de las PQR y el historial del cliente en una única aplicación, permitiendo consultar, registrar y actualizar las solicitudes de manera organizada.
 
 
-## Instrucciones para ejecutar el proyecto##
+## Instrucciones para ejecutar el proyecto
 
 ## Requisitos
 - Python 3.10+
