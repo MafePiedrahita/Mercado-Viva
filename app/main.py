@@ -1,4 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, Response, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
 from app.data.database import get_db, Base, engine
@@ -11,6 +14,8 @@ from typing import List
 
 
 app = FastAPI()
+templates = Jinja2Templates(directory="app/web/templates")
+app.mount("/static", StaticFiles(directory="app/web/static"), name="static")
 
 
 # ---------- Dependencia para saber quién está logueado ----------
@@ -211,3 +216,28 @@ def listar_pqrs(
         pqrs = db.query(PQR).all()
 
     return pqrs
+
+
+@app.get("/", response_class=HTMLResponse)
+def pagina_login(request: Request):
+    return templates.TemplateResponse(request, "login.html", {})
+
+@app.get("/registro", response_class=HTMLResponse)
+def pagina_registro(request: Request):
+    return templates.TemplateResponse(request, "registro.html", {})
+
+@app.get("/crear-pqr", response_class=HTMLResponse)
+def pagina_crear_pqr(request: Request):
+    return templates.TemplateResponse(request, "crear_pqr.html", {})
+
+@app.get("/historial", response_class=HTMLResponse)
+def pagina_historial(request: Request):
+    return templates.TemplateResponse(request, "historial.html", {})
+
+@app.get("/gestion-pqrs", response_class=HTMLResponse)
+def pagina_gestion_pqrs(request: Request):
+    return templates.TemplateResponse(request, "gestion_pqrs.html", {})
+
+@app.get("/responder-pqr", response_class=HTMLResponse)
+def pagina_responder_pqr(request: Request):
+    return templates.TemplateResponse(request, "responder_pqr.html", {})

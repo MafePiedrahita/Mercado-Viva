@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mercado Viva - Registro</title>
+</head>
+<body>
+    <h1>Crear cuenta</h1>
+    <form id="form-registro">
+        <input type="text" id="nombre" placeholder="Nombre" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Contraseña" required>
+        <select id="rol" required>
+            <option value="cliente">Cliente</option>
+            <option value="servicio_cliente">Servicio al cliente</option>
+            <option value="area_responsable">Área responsable</option>
+        </select>
+        <button type="submit">Registrarme</button>
+    </form>
+    <p id="mensaje-error" style="color: red;"></p>
+    <p id="mensaje-exito" style="color: green;"></p>
+
+    <p>¿Ya tienes cuenta? <a href="/">Inicia sesión</a></p>
+
+    <script src="/static/js/registro.js"></script>
+</body>
+</html>
