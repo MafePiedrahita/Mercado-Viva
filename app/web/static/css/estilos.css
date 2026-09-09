@@ -131,3 +131,25 @@ table button {
 .pagina-centrada form {
     text-align: left; /* los inputs se ven raros centrados, mejor alineados a la izquierda dentro de la tarjeta */
 }
+
+body.pagina-login {
+    background-image: url('/static/assets/fondo-mercado.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    min-height: 100vh;
+}
+
+body.pagina-login::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(250, 246, 238, 0.75);
+    backdrop-filter: blur(6px);
+    z-index: 0;
+}
+
+body.pagina-login > * {
+    position: relative;
+    z-index: 1;
+}
