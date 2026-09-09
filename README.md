@@ -75,7 +75,7 @@ uvicorn app.main:app --reload
 
 ## URL de la aplicación publicada
 
-[pendiente hasta desplegar en Render]
+https://mercado-viva-x1t4.onrender.com/ 
 
 ## Repositorio
 
