@@ -193,3 +193,21 @@ def consultar_historial(
 
     pqrs = db.query(PQR).filter(PQR.cliente_id == usuario.id).all()
     return pqrs
+
+
+@app.get("/pqrs", response_model=List[PQRSalida])
+def listar_pqrs(
+    usuario: Usuario = Depends(usuario_actual),
+    db: Session = Depends(get_db),
+):
+    if usuario.rol not in ("servicio_cliente", "area_responsable"):
+        raise HTTPException(status_code=403, detail="No autorizado para ver todas las PQR")
+
+    if usuario.rol == "area_responsable":
+        # Solo ve las que le fueron asignadas a alguna área (para responder)
+        pqrs = db.query(PQR).filter(PQR.area_id.isnot(None)).all()
+    else:
+        # servicio_cliente ve todas
+        pqrs = db.query(PQR).all()
+
+    return pqrs

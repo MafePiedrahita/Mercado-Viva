@@ -1,4 +1,5 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, 
+from datetime import datetime
 
 class UsuarioCrear(BaseModel):
     """Datos que llegan al REGISTRAR un nuevo usuario (cliente, servicio_cliente o area_responsable)."""
@@ -60,6 +61,7 @@ class PQRSalida(BaseModel):
     estado: str
     respuesta: str | None
     area_id: int | None
+    fecha_respuesta: datetime | None   # ← nueva línea
 
     class Config:
         from_attributes = True
