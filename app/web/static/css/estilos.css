@@ -1,11 +1,15 @@
-/* ---------- Variables de color ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Nunito:wght@400;500;600&display=swap');
+
 :root {
-    --verde-principal: #2e7d32;
-    --verde-oscuro: #1b5e20;
-    --verde-claro: #e8f5e9;
-    --gris-texto: #333;
-    --gris-borde: #ccc;
-    --rojo-error: #c62828;
+    --verde-principal: #2F6B3C;
+    --verde-oscuro: #1F4A28;
+    --verde-claro: #E8F0E4;
+    --crema: #FAF6EE;
+    --terracota: #C1440E;
+    --texto: #1F2A1A;
+    --texto-suave: #5C6B58;
+    --borde: #D8D2C4;
+    --rojo-error: #B03A2E;
 }
 
 * {
@@ -14,61 +18,80 @@
 
 body {
     margin: 0;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: #f5f5f5;
-    color: var(--gris-texto);
+    font-family: 'Nunito', Arial, sans-serif;
+    background-color: var(--crema);
+    color: var(--texto);
 }
 
-/* ---------- Header ---------- */
+h1, h2, h3 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    color: var(--verde-oscuro);
+    margin: 0;
+}
+
+/* ---------- Header (páginas internas) ---------- */
 .header {
     background-color: var(--verde-principal);
     color: white;
-    padding: 16px 24px;
+    padding: 20px 32px;
 }
 
 .header h1 {
+    color: white;
+    font-size: 1.6rem;
     margin: 0;
-    font-size: 1.5rem;
 }
 
 /* ---------- Contenedor central ---------- */
 .contenedor {
-    max-width: 800px;
-    margin: 32px auto;
+    max-width: 820px;
+    margin: 40px auto;
     padding: 0 20px;
 }
 
-h2 {
-    color: var(--verde-oscuro);
+.contenedor h2 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
 }
 
 /* ---------- Formularios ---------- */
 form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     max-width: 400px;
     background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid var(--borde);
 }
 
 input, textarea, select {
-    padding: 10px;
-    border: 1px solid var(--gris-borde);
-    border-radius: 4px;
-    font-size: 1rem;
+    padding: 12px 14px;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    color: var(--texto);
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--verde-principal);
 }
 
 button {
     background-color: var(--verde-principal);
     color: white;
     border: none;
-    padding: 10px 16px;
-    border-radius: 4px;
-    font-size: 1rem;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
     cursor: pointer;
+    transition: background-color 0.15s ease;
 }
 
 button:hover {
@@ -78,12 +101,14 @@ button:hover {
 /* ---------- Mensajes ---------- */
 .mensaje-error {
     color: var(--rojo-error);
-    font-weight: bold;
+    font-weight: 500;
+    font-size: 0.9rem;
 }
 
 .mensaje-exito {
     color: var(--verde-principal);
-    font-weight: bold;
+    font-weight: 500;
+    font-size: 0.9rem;
 }
 
 /* ---------- Tablas ---------- */
@@ -91,36 +116,49 @@ table {
     width: 100%;
     border-collapse: collapse;
     background: white;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--borde);
 }
 
 th, td {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--gris-borde);
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--borde);
     text-align: left;
+    font-size: 0.9rem;
 }
 
 th {
     background-color: var(--verde-claro);
     color: var(--verde-oscuro);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
 }
 
 /* ---------- Links ---------- */
 a {
-    color: var(--verde-principal);
+    color: var(--terracota);
+    text-decoration: none;
+    font-weight: 600;
 }
 
-/* ---------- Inputs pequeños dentro de tabla (gestión/responder) ---------- */
+a:hover {
+    text-decoration: underline;
+}
+
 table input {
-    width: 120px;
-    padding: 6px;
+    width: 110px;
+    padding: 8px;
     margin-right: 6px;
+    font-size: 0.85rem;
 }
 
 table button {
-    padding: 6px 10px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
 }
 
+/* ---------- Utilidad genérica de centrado ---------- */
 .pagina-centrada {
     display: flex;
     flex-direction: column;
@@ -129,9 +167,10 @@ table button {
 }
 
 .pagina-centrada form {
-    text-align: left; /* los inputs se ven raros centrados, mejor alineados a la izquierda dentro de la tarjeta */
+    text-align: left;
 }
 
+/* ---------- Fondo con imagen (login) ---------- */
 body.pagina-login {
     background-image: url('/static/assets/fondo-mercado.jpg');
     background-size: cover;
@@ -153,20 +192,23 @@ body.pagina-login > * {
     position: relative;
     z-index: 1;
 }
+
+/* ---------- Marca (encabezado del login) ---------- */
 .login-marca {
     text-align: center;
     padding-top: 60px;
     margin-bottom: 32px;
 }
 
-.login-marca .subtitulo-marca {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-size: 1rem;
-    color: var(--texto-suave);
-    margin-top: 6px;
+.login-icono {
+    width: 48px;
+    height: 48px;
+    background-color: var(--verde-principal);
+    border-radius: 12px;
+    margin: 0 auto 20px;
 }
 
+/* ---------- Tarjeta de login ---------- */
 .login-card {
     max-width: 420px;
     margin: 0 auto;
@@ -175,12 +217,28 @@ body.pagina-login > * {
     border: 1px solid var(--borde);
     border-top: 4px solid var(--verde-principal);
     padding: 32px;
+    text-align: center;
 }
 
 .login-card .subtitulo {
     margin-bottom: 24px;
+    color: var(--texto-suave);
+    font-size: 0.9rem;
 }
 
+.login-card form {
+    text-align: left;
+}
+
+.login-card label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--texto);
+    margin-bottom: 4px;
+    display: block;
+}
+
+/* ---------- Inputs con icono (email / contraseña) ---------- */
 .campo-con-icono {
     position: relative;
     margin-bottom: 4px;
@@ -192,31 +250,31 @@ body.pagina-login > * {
     top: 50%;
     transform: translateY(-50%);
     color: var(--texto-suave);
+    pointer-events: none;
 }
 
 .campo-con-icono input {
     width: 100%;
     padding-left: 42px;
+    padding-right: 44px;
 }
 
 .toggle-password {
     position: absolute;
-    right: 14px;
+    right: 20px;
     top: 50%;
     transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     color: var(--texto-suave);
     background: none;
     border: none;
     padding: 0;
-}
-
-.login-card label {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--texto);
-    margin-bottom: 4px;
-    display: block;
+    line-height: 0;
 }
 
 .boton-con-flecha {
