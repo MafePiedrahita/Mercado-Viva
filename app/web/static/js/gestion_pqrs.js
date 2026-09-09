@@ -30,7 +30,12 @@ async function cargarPqrs() {
 }
 
 async function clasificar(pqrId) {
-    const categoria = document.getElementById(`categoria-${pqrId}`).value;
+    const categoria = document.getElementById(`categoria-${pqrId}`).value.trim();
+
+    if (!categoria) {
+        alert("Escribe una categoría antes de clasificar");
+        return;
+    }
 
     const respuesta = await fetch(`/pqrs/${pqrId}/clasificar`, {
         method: "PATCH",
@@ -39,7 +44,7 @@ async function clasificar(pqrId) {
     });
 
     if (respuesta.ok) {
-        cargarPqrs(); // recarga la tabla para reflejar el nuevo estado
+        cargarPqrs();
     } else {
         alert("Error al clasificar la PQR");
     }

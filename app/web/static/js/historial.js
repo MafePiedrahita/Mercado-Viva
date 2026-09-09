@@ -14,7 +14,7 @@ async function cargarHistorial() {
         fila.innerHTML = `
             <td>${pqr.motivo}</td>
             <td>${pqr.descripcion}</td>
-            <td>${pqr.categoria ?? "Sin clasificar"}</td>
+            <td>${pqr.categoria || "Sin clasificar"}</td>
             <td>${pqr.estado}</td>
             <td>${pqr.respuesta ?? "Sin respuesta"}</td>
         `;
