@@ -290,3 +290,10 @@ body.pagina-login > * {
     margin-top: 24px;
     font-size: 0.9rem;
 }
+
+.campo-con-icono .toggle-password,
+.campo-con-icono .toggle-password:hover,
+.campo-con-icono .toggle-password:focus {
+    background: transparent;
+    box-shadow: none;
+}

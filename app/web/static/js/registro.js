@@ -17,7 +17,10 @@ document.getElementById("form-registro").addEventListener("submit", async functi
 
     if (respuesta.ok) {
         mensajeError.textContent = "";
-        mensajeExito.textContent = "Cuenta creada. Ya puedes iniciar sesión.";
+        mensajeExito.textContent = "Registro exitoso. Redirigiendo a inicio de sesión...";
+        setTimeout(() => {
+            window.location.href = "/";
+        }, 1500);
     } else {
         const error = await respuesta.json();
         mensajeExito.textContent = "";
