@@ -120,3 +120,14 @@ table input {
 table button {
     padding: 6px 10px;
 }
+
+.pagina-centrada {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.pagina-centrada form {
+    text-align: left; /* los inputs se ven raros centrados, mejor alineados a la izquierda dentro de la tarjeta */
+}

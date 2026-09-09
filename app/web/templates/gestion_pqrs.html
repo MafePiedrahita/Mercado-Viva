@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestión de PQR</title>
+    <link rel="stylesheet" href="/static/css/estilos.css">
 </head>
 <body>
-    <h1>Gestión de PQR (Servicio al cliente)</h1>
-
-    <table id="tabla-pqrs" border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Motivo</th>
-                <th>Estado</th>
-                <th>Clasificar</th>
-                <th>Asignar área</th>
-            </tr>
-        </thead>
-        <tbody id="cuerpo-tabla">
-            <!-- se llena con JS -->
-        </tbody>
-    </table>
-
+    <header class="header"><h1>Mercado Viva</h1></header>
+    <main class="contenedor">
+        <h2>Gestión de PQR (Servicio al cliente)</h2>
+        <table id="tabla-pqrs">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Motivo</th>
+                    <th>Estado</th>
+                    <th>Clasificar</th>
+                    <th>Asignar área</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpo-tabla"></tbody>
+        </table>
+    </main>
     <script src="/static/js/gestion_pqrs.js"></script>
 </body>
 </html>
