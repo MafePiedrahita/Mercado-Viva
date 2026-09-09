@@ -12,6 +12,7 @@ document.getElementById("form-login").addEventListener("submit", async function 
 
     if (respuesta.ok) {
         const datos = await respuesta.json();
+        console.log(datos);
         // Redirige según el rol
         if (datos.rol === "cliente") {
             window.location.href = "/crear-pqr";
