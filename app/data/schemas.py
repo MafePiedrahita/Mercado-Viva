@@ -67,3 +67,11 @@ class PQRAsignar(BaseModel):
     """HU2+HU3 fusionadas: servicio al cliente clasifica y asigna en un solo paso."""
     categoria: str
     area_id: int
+
+
+class UsuarioCrear(BaseModel):
+    nombre: str
+    email: EmailStr
+    password: str
+    rol: str
+    area_id: int | None = None  # NUEVO — solo aplica si rol = area_responsable

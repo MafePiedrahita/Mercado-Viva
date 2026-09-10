@@ -46,6 +46,7 @@ def registrar_usuario(datos: UsuarioCrear, db: Session = Depends(get_db)):
         email=datos.email,
         password_hash=hashear_password(datos.password),
         rol=datos.rol,
+        area_id=datos.area_id,  # NUEVO
     )
     db.add(nuevo_usuario)
     db.commit()
@@ -205,7 +206,7 @@ def listar_pqrs(
         orden_cerradas_al_final = case((PQR.estado == "cerrada", 1), else_=0)
         pqrs = (
             db.query(PQR)
-            .filter(PQR.area_id.isnot(None))
+            .filter(PQR.area_id == usuario.area_id)
             .order_by(orden_cerradas_al_final, PQR.fecha_creacion.desc())
             .all()
         )

@@ -12,6 +12,7 @@ class Usuario(Base):
     email = Column(String(150), unique=True, nullable=False)
     password_hash = Column(String(255), nullable=False)
     rol = Column(String(20), nullable=False)
+    area_id = Column(Integer, ForeignKey("area.id"), nullable=True)  # NUEVO
     fecha_creacion = Column(DateTime(timezone=True), server_default=func.now())
 
     __table_args__ = (
@@ -19,6 +20,7 @@ class Usuario(Base):
     )
 
     pqrs = relationship("PQR", back_populates="cliente")
+    area = relationship("Area")  # NUEVO
 
 
 class Area(Base):
