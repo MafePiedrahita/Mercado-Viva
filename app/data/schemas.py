@@ -1,12 +1,14 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
+
 class UsuarioCrear(BaseModel):
     """Datos que llegan al REGISTRAR un nuevo usuario (cliente, servicio_cliente o area_responsable)."""
     nombre: str
-    email: EmailStr  # EmailStr valida automáticamente que tenga formato de correo válido (ej. algo@dominio.com)
-    password: str    # contraseña en texto plano SOLO en este punto de entrada; se hashea antes de guardar
+    email: EmailStr
+    password: str
     rol: str
+    area_id: int | None = None  # solo aplica si rol = area_responsable
 
 
 class UsuarioLogin(BaseModel):
@@ -24,8 +26,7 @@ class UsuarioSalida(BaseModel):
     area_id: int | None = None
 
     class Config:
-        from_attributes = True  
-
+        from_attributes = True
 
 
 class PQRCrear(BaseModel):
@@ -35,7 +36,8 @@ class PQRCrear(BaseModel):
 
 
 class PQRAsignar(BaseModel):
-    """HU3: servicio al cliente asigna la PQR clasificada a un área responsable."""
+    """HU2+HU3 fusionadas: servicio al cliente clasifica y asigna en un solo paso."""
+    categoria: str
     area_id: int
 
 
@@ -62,17 +64,3 @@ class PQRSalida(BaseModel):
 
     class Config:
         from_attributes = True
-
-
-class PQRAsignar(BaseModel):
-    """HU2+HU3 fusionadas: servicio al cliente clasifica y asigna en un solo paso."""
-    categoria: str
-    area_id: int
-
-
-class UsuarioCrear(BaseModel):
-    nombre: str
-    email: EmailStr
-    password: str
-    rol: str
-    area_id: int | None = None  # NUEVO — solo aplica si rol = area_responsable

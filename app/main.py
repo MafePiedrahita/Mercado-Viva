@@ -218,10 +218,7 @@ def listar_pqrs(
 
 
 @app.get("/areas")
-def listar_areas(
-    usuario: Usuario = Depends(usuario_actual),
-    db: Session = Depends(get_db),
-):
+def listar_areas(db: Session = Depends(get_db)):
     areas = db.query(Area).all()
     return [{"id": area.id, "nombre": area.nombre} for area in areas]
 
