@@ -6,8 +6,11 @@
     <link rel="stylesheet" href="/static/css/estilos.css">
 </head>
 <body>
-    <header class="header"><h1>Mercado Viva</h1></header>
-    <main class="contenedor">
+        <header class="header">
+            <h1>Mercado Viva</h1>
+            <button class="btn-logout" onclick="cerrarSesion()">Cerrar sesión</button>
+        </header>    
+        <main class="contenedor">
         <h2>Registrar una PQR</h2>
         <form id="form-pqr">
             <input type="text" id="motivo" placeholder="Motivo" required>
@@ -17,6 +20,7 @@
         <p id="mensaje"></p>
         <p><a href="/historial">Ver mi historial</a></p>
     </main>
+    <script src="/static/js/comun.js"></script>
     <script src="/static/js/crear_pqr.js"></script>
 </body>
 </html>

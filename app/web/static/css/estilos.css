@@ -311,3 +311,26 @@ body.pagina-login > * {
 .badge-asignada { background: #EAE0F5; color: #5C2A8A; }
 .badge-respondida { background: var(--verde-claro); color: var(--verde-oscuro); }
 .badge-cerrada { background: #EDEDED; color: #666; }
+
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn-logout {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.btn-logout:hover {
+    background: rgba(255, 255, 255, 0.15);
+}

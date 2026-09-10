@@ -6,8 +6,11 @@
     <link rel="stylesheet" href="/static/css/estilos.css">
 </head>
 <body>
-    <header class="header"><h1>Mercado Viva</h1></header>
-    <main class="contenedor">
+        <header class="header">
+            <h1>Mercado Viva</h1>
+            <button class="btn-logout" onclick="cerrarSesion()">Cerrar sesión</button>
+        </header>
+        <main class="contenedor">
         <h2>Gestión de PQR</h2>
         <p style="color: var(--texto-suave); margin-top: -12px; margin-bottom: 20px; font-size: 0.9rem;">
             Clasifica y asigna las PQR registradas.
@@ -25,6 +28,7 @@
             <tbody id="cuerpo-tabla"></tbody>
         </table>
     </main>
+    <script src="/static/js/comun.js"></script>    
     <script src="/static/js/gestion_pqrs.js"></script>
 </body>
 </html>
