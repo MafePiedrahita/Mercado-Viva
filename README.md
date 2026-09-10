@@ -65,13 +65,29 @@ uvicorn app.main:app --reload
 [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 
+## Flujo y estados de una PQR
+ 
+Una PQR avanza por 4 estados:
+ 
+```
+registrada -> asignada -> respondida -> cerrada
+```
+ 
+- **registrada**: el cliente la creó.
+- **asignada**: servicio al cliente le puso una categoría y la asignó a un área, en un solo paso.
+- **respondida**: el área responsable registró la solución.
+- **cerrada**: servicio al cliente la cierra, solo posible si ya está respondida.
+
+  
 ## Cómo probar el flujo completo
 
-1. Regístrate en `/registro` con rol `cliente`, `servicio_cliente` o `area_responsable`.
-2. Como **cliente**: inicia sesión y registra una PQR.
-3. Como **servicio_cliente**: clasifica y asigna la PQR a un área.
-4. Como **area_responsable**: responde la PQR.
-5. Como **cliente** de nuevo: consulta el historial y verifica que la respuesta aparezca.
+1. En `/registro`, crea al menos un área responsable con su propia cuenta: al elegir el rol `area_responsable`, el formulario pide seleccionar a qué área pertenece (Logística, Facturación, Atención al cliente, etc.).
+2. Regístrate también con rol `cliente` y con rol `servicio_cliente`.
+3. Como **cliente**: inicia sesión y registra una PQR (`/crear-pqr`).
+4. Como **servicio_cliente**: en `/gestion-pqrs`, elige una categoría y un área para la PQR, y dale "Clasificar y asignar" (una sola acción).
+5. Como **area_responsable** (la cuenta que pertenece a esa área): en `/responder-pqr`, verás solo las PQR de tu propia área. Escribe la respuesta.
+6. Como **servicio_cliente** de nuevo: en `/gestion-pqrs`, aparece el botón "Cerrar" para esa PQR una vez está respondida.
+7. Como **cliente**: consulta `/historial` y verifica que el estado final y la respuesta aparezcan correctamente.
 
 ## URL de la aplicación publicada
 
