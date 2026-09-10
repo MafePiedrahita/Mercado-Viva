@@ -21,9 +21,10 @@ class UsuarioSalida(BaseModel):
     nombre: str
     email: EmailStr
     rol: str
+    area_id: int | None = None
 
     class Config:
-        from_attributes = True  # permite leer estos campos directo desde un objeto SQLAlchemy
+        from_attributes = True  
 
 
 

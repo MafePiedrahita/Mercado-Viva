@@ -15,7 +15,7 @@ async function cargarHistorial() {
             <td>${pqr.motivo}</td>
             <td>${pqr.descripcion}</td>
             <td>${pqr.categoria || "Sin clasificar"}</td>
-            <td>${pqr.estado}</td>
+            <td>${badgeEstado(pqr.estado)}</td>
             <td>${pqr.respuesta ?? "Sin respuesta"}</td>
         `;
         cuerpoTabla.appendChild(fila);
@@ -23,3 +23,7 @@ async function cargarHistorial() {
 }
 
 cargarHistorial(); // se ejecuta apenas carga el script, sin esperar ningún clic
+
+function badgeEstado(estado) {
+    return `<span class="badge-estado badge-${estado}">${estado}</span>`;
+}

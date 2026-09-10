@@ -2,6 +2,24 @@ function badgeEstado(estado) {
     return `<span class="badge-estado badge-${estado}">${estado}</span>`;
 }
 
+async function mostrarAreaUsuario() {
+    const respuestaPerfil = await fetch("/perfil");
+    if (!respuestaPerfil.ok) return;
+
+    const usuario = await respuestaPerfil.json();
+    if (!usuario.area_id) return;
+
+    const respuestaAreas = await fetch("/areas");
+    if (!respuestaAreas.ok) return;
+
+    const areas = await respuestaAreas.json();
+    const areaUsuario = areas.find(a => a.id === usuario.area_id);
+
+    if (areaUsuario) {
+        document.getElementById("nombre-area").textContent = areaUsuario.nombre;
+    }
+}
+
 async function cargarPqrs() {
     const respuesta = await fetch("/pqrs");
 
@@ -54,4 +72,5 @@ async function responder(pqrId) {
     }
 }
 
+mostrarAreaUsuario();
 cargarPqrs();
