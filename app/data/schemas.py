@@ -61,7 +61,8 @@ class PQRSalida(BaseModel):
     estado: str
     respuesta: str | None
     area_id: int | None
-    fecha_respuesta: datetime | None   # ← nueva línea
+    fecha_creacion: datetime
+    fecha_respuesta: datetime | None
 
     class Config:
         from_attributes = True

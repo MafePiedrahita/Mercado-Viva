@@ -1,3 +1,41 @@
+const CATEGORIAS = [
+    "Calidad del producto",
+    "Atención al cliente",
+    "Protección de datos",
+    "Facturación",
+    "Logística/entrega",
+];
+
+let areasDisponibles = [];
+
+function badgeEstado(estado) {
+    return `<span class="badge-estado badge-${estado}">${estado}</span>`;
+}
+
+function opcionesCategoria(seleccionActual) {
+    let html = `<option value="">Selecciona...</option>`;
+    CATEGORIAS.forEach(cat => {
+        const marcado = cat === seleccionActual ? "selected" : "";
+        html += `<option value="${cat}" ${marcado}>${cat}</option>`;
+    });
+    return html;
+}
+
+function opcionesArea() {
+    let html = `<option value="">Selecciona...</option>`;
+    areasDisponibles.forEach(area => {
+        html += `<option value="${area.id}">${area.nombre}</option>`;
+    });
+    return html;
+}
+
+async function cargarAreas() {
+    const respuesta = await fetch("/areas");
+    if (respuesta.ok) {
+        areasDisponibles = await respuesta.json();
+    }
+}
+
 async function cargarPqrs() {
     const respuesta = await fetch("/pqrs");
 
@@ -8,20 +46,20 @@ async function cargarPqrs() {
 
     const pqrs = await respuesta.json();
     const cuerpoTabla = document.getElementById("cuerpo-tabla");
-    cuerpoTabla.innerHTML = ""; // limpia antes de volver a pintar
+    cuerpoTabla.innerHTML = "";
 
     pqrs.forEach(pqr => {
         const fila = document.createElement("tr");
         fila.innerHTML = `
-            <td>${pqr.id}</td>
+            <td>${new Date(pqr.fecha_creacion).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
             <td>${pqr.motivo}</td>
-            <td>${pqr.estado}</td>
+            <td>${badgeEstado(pqr.estado)}</td>
             <td>
-                <input type="text" id="categoria-${pqr.id}" placeholder="Categoría">
+                <select id="categoria-${pqr.id}">${opcionesCategoria(pqr.categoria)}</select>
                 <button onclick="clasificar(${pqr.id})">Clasificar</button>
             </td>
             <td>
-                <input type="number" id="area-${pqr.id}" placeholder="ID del área">
+                <select id="area-${pqr.id}">${opcionesArea()}</select>
                 <button onclick="asignar(${pqr.id})">Asignar</button>
             </td>
         `;
@@ -30,10 +68,10 @@ async function cargarPqrs() {
 }
 
 async function clasificar(pqrId) {
-    const categoria = document.getElementById(`categoria-${pqrId}`).value.trim();
+    const categoria = document.getElementById(`categoria-${pqrId}`).value;
 
     if (!categoria) {
-        alert("Escribe una categoría antes de clasificar");
+        alert("Selecciona una categoría antes de clasificar");
         return;
     }
 
@@ -53,6 +91,11 @@ async function clasificar(pqrId) {
 async function asignar(pqrId) {
     const areaId = document.getElementById(`area-${pqrId}`).value;
 
+    if (!areaId) {
+        alert("Selecciona un área antes de asignar");
+        return;
+    }
+
     const respuesta = await fetch(`/pqrs/${pqrId}/asignar`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -66,4 +109,9 @@ async function asignar(pqrId) {
     }
 }
 
-cargarPqrs();
+async function iniciar() {
+    await cargarAreas();
+    await cargarPqrs();
+}
+
+iniciar();

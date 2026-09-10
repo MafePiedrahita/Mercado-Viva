@@ -19,8 +19,6 @@ app.mount("/static", StaticFiles(directory="app/web/static"), name="static")
 
 
 # ---------- Dependencia para saber quién está logueado ----------
-# La usan todos los endpoints protegidos: FastAPI la ejecuta antes
-# de entrar al endpoint y ya llega el objeto Usuario listo para usar.
 def usuario_actual(request: Request, db: Session = Depends(get_db)):
     id_sesion = request.cookies.get("id_sesion")
     if not id_sesion:
@@ -37,7 +35,6 @@ def usuario_actual(request: Request, db: Session = Depends(get_db)):
 
 @app.post("/registro", response_model=UsuarioSalida)
 def registrar_usuario(datos: UsuarioCrear, db: Session = Depends(get_db)):
-    # No permitir dos usuarios con el mismo email
     existe = db.query(Usuario).filter(Usuario.email == datos.email).first()
     if existe:
         raise HTTPException(status_code=400, detail="Ese email ya está registrado")
@@ -45,7 +42,7 @@ def registrar_usuario(datos: UsuarioCrear, db: Session = Depends(get_db)):
     nuevo_usuario = Usuario(
         nombre=datos.nombre,
         email=datos.email,
-        password_hash=hashear_password(datos.password),  # nunca se guarda la contraseña en texto plano
+        password_hash=hashear_password(datos.password),
         rol=datos.rol,
     )
     db.add(nuevo_usuario)
@@ -63,7 +60,6 @@ def login(datos: UsuarioLogin, response: Response, db: Session = Depends(get_db)
     if not usuario or not verificar_password(datos.password, usuario.password_hash):
         raise HTTPException(status_code=401, detail="Email o contraseña incorrectos")
 
-    # Crea la sesión en la BD y se la manda al navegador como cookie
     id_sesion = crear_sesion(db, usuario.id)
     response.set_cookie(key="id_sesion", value=id_sesion, httponly=True)
 
@@ -78,8 +74,7 @@ def logout(response: Response):
     return {"mensaje": "Sesión cerrada"}
 
 
-# ---------- Endpoint de prueba, para confirmar que usuario_actual funciona ----------
-# (herramienta de debugging, no es parte de las HU; se puede quitar antes de entregar)
+# ---------- Endpoint de prueba ----------
 
 @app.get("/perfil", response_model=UsuarioSalida)
 def ver_perfil(usuario: Usuario = Depends(usuario_actual)):
@@ -94,7 +89,6 @@ def crear_pqr(
     usuario: Usuario = Depends(usuario_actual),
     db: Session = Depends(get_db),
 ):
-    # cliente_id sale de la sesión, no del body, así nadie crea PQR a nombre de otro
     nueva_pqr = PQR(
         motivo=datos.motivo,
         descripcion=datos.descripcion,
@@ -146,7 +140,6 @@ def asignar_pqr(
     if not pqr:
         raise HTTPException(status_code=404, detail="PQR no encontrada")
 
-    # También se valida que el área exista, porque area_id es una foreign key
     area = db.query(Area).filter(Area.id == datos.area_id).first()
     if not area:
         raise HTTPException(status_code=404, detail="Área no encontrada")
@@ -185,8 +178,6 @@ def responder_pqr(
 
 
 # ---------- HU5: consultar historial completo del cliente ----------
-# Endpoint clave del objetivo del MVP: trae todas las PQR del cliente,
-# sin importar en qué "canal" se hayan simulado como creadas.
 
 @app.get("/pqrs/historial", response_model=List[PQRSalida])
 def consultar_historial(
@@ -196,7 +187,8 @@ def consultar_historial(
     if usuario.rol != "cliente":
         raise HTTPException(status_code=403, detail="Solo el cliente puede consultar su propio historial")
 
-    pqrs = db.query(PQR).filter(PQR.cliente_id == usuario.id).all()
+    # CAMBIO: se agrega order_by para que siempre aparezcan de más reciente a más antigua
+    pqrs = db.query(PQR).filter(PQR.cliente_id == usuario.id).order_by(PQR.fecha_creacion.desc()).all()
     return pqrs
 
 
@@ -209,13 +201,22 @@ def listar_pqrs(
         raise HTTPException(status_code=403, detail="No autorizado para ver todas las PQR")
 
     if usuario.rol == "area_responsable":
-        # Solo ve las que le fueron asignadas a alguna área (para responder)
-        pqrs = db.query(PQR).filter(PQR.area_id.isnot(None)).all()
+        # CAMBIO: se agrega order_by
+        pqrs = db.query(PQR).filter(PQR.area_id.isnot(None)).order_by(PQR.fecha_creacion.desc()).all()
     else:
-        # servicio_cliente ve todas
-        pqrs = db.query(PQR).all()
+        # CAMBIO: se agrega order_by
+        pqrs = db.query(PQR).order_by(PQR.fecha_creacion.desc()).all()
 
     return pqrs
+
+
+@app.get("/areas")
+def listar_areas(
+    usuario: Usuario = Depends(usuario_actual),
+    db: Session = Depends(get_db),
+):
+    areas = db.query(Area).all()
+    return [{"id": area.id, "nombre": area.nombre} for area in areas]
 
 
 @app.get("/", response_class=HTMLResponse)

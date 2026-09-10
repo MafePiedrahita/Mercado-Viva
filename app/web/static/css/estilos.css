@@ -297,3 +297,17 @@ body.pagina-login > * {
     background: transparent;
     box-shadow: none;
 }
+
+.badge-estado {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.badge-registrada { background: #F0EAD8; color: #8A6D1D; }
+.badge-clasificada { background: #E0EAF5; color: #2A5C8A; }
+.badge-asignada { background: #EAE0F5; color: #5C2A8A; }
+.badge-respondida { background: var(--verde-claro); color: var(--verde-oscuro); }
+.badge-cerrada { background: #EDEDED; color: #666; }
