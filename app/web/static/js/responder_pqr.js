@@ -1,3 +1,7 @@
+function badgeEstado(estado) {
+    return `<span class="badge-estado badge-${estado}">${estado}</span>`;
+}
+
 async function cargarPqrs() {
     const respuesta = await fetch("/pqrs");
 
@@ -13,27 +17,29 @@ async function cargarPqrs() {
     pqrs.forEach(pqr => {
         const fila = document.createElement("tr");
 
-        // Si ya tiene respuesta, solo la mostramos (no dejamos volver a responder)
         const celdaRespuesta = pqr.respuesta
-            ? `<td>${pqr.respuesta}</td>`
-            : `<td>
-                 <input type="text" id="respuesta-${pqr.id}" placeholder="Escribe la respuesta">
-                 <button onclick="responder(${pqr.id})">Responder</button>
-               </td>`;
+            ? `<span>${pqr.respuesta}</span>`
+            : `<input type="text" id="respuesta-${pqr.id}" placeholder="Escribe la respuesta">
+               <button onclick="responder(${pqr.id})">Responder</button>`;
 
         fila.innerHTML = `
-            <td>${pqr.id}</td>
+            <td>${new Date(pqr.fecha_creacion).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
             <td>${pqr.motivo}</td>
             <td>${pqr.descripcion}</td>
-            <td>${pqr.estado}</td>
-            ${celdaRespuesta}
+            <td>${badgeEstado(pqr.estado)}</td>
+            <td>${celdaRespuesta}</td>
         `;
         cuerpoTabla.appendChild(fila);
     });
 }
 
 async function responder(pqrId) {
-    const respuestaTexto = document.getElementById(`respuesta-${pqrId}`).value;
+    const respuestaTexto = document.getElementById(`respuesta-${pqrId}`).value.trim();
+
+    if (!respuestaTexto) {
+        alert("Escribe una respuesta antes de continuar");
+        return;
+    }
 
     const respuesta = await fetch(`/pqrs/${pqrId}/responder`, {
         method: "PATCH",
