@@ -334,3 +334,27 @@ body.pagina-login > * {
 .btn-logout:hover {
     background: rgba(255, 255, 255, 0.15);
 }
+
+#tabla-pqrs td, #tabla-pqrs th {
+    padding: 18px 20px;
+}
+
+#tabla-pqrs select {
+    margin-bottom: 8px;
+    min-width: 160px;
+}
+
+#tabla-pqrs td > select,
+#tabla-pqrs td > button {
+    display: block;
+}
+
+#tabla-pqrs td, #tabla-pqrs th {
+    padding: 18px 20px;
+}
+
+#tabla-pqrs td > input,
+#tabla-pqrs td > button {
+    display: block;
+    margin-bottom: 8px;
+}

@@ -33,11 +33,6 @@ class PQRCrear(BaseModel):
     descripcion: str
 
 
-class PQRClasificar(BaseModel):
-    """HU2: servicio al cliente clasifica la PQR ya registrada."""
-    categoria: str
-
-
 class PQRAsignar(BaseModel):
     """HU3: servicio al cliente asigna la PQR clasificada a un área responsable."""
     area_id: int
@@ -66,3 +61,9 @@ class PQRSalida(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class PQRAsignar(BaseModel):
+    """HU2+HU3 fusionadas: servicio al cliente clasifica y asigna en un solo paso."""
+    categoria: str
+    area_id: int

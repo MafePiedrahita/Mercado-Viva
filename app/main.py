@@ -3,10 +3,12 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
+from sqlalchemy import case
+
 
 from app.data.database import get_db, Base, engine
 from app.data.models import Usuario, PQR, Area
-from app.data.schemas import UsuarioCrear, UsuarioLogin, UsuarioSalida, PQRCrear, PQRSalida, PQRClasificar, PQRAsignar, PQRResponder
+from app.data.schemas import UsuarioCrear, UsuarioLogin, UsuarioSalida, PQRCrear, PQRSalida, PQRAsignar, PQRResponder
 from app.security import hashear_password, verificar_password, crear_sesion, obtener_usuario_por_sesion
 
 from datetime import datetime, timezone
@@ -100,30 +102,6 @@ def crear_pqr(
     return nueva_pqr
 
 
-# ---------- HU2: clasificar PQR ----------
-
-@app.patch("/pqrs/{pqr_id}/clasificar", response_model=PQRSalida)
-def clasificar_pqr(
-    pqr_id: int,
-    datos: PQRClasificar,
-    usuario: Usuario = Depends(usuario_actual),
-    db: Session = Depends(get_db),
-):
-    if usuario.rol != "servicio_cliente":
-        raise HTTPException(status_code=403, detail="Solo servicio al cliente puede clasificar una PQR")
-
-    pqr = db.query(PQR).filter(PQR.id == pqr_id).first()
-    if not pqr:
-        raise HTTPException(status_code=404, detail="PQR no encontrada")
-
-    pqr.categoria = datos.categoria
-    pqr.estado = "clasificada"
-
-    db.commit()
-    db.refresh(pqr)
-    return pqr
-
-
 # ---------- HU3: asignar PQR a un área ----------
 
 @app.patch("/pqrs/{pqr_id}/asignar", response_model=PQRSalida)
@@ -134,7 +112,7 @@ def asignar_pqr(
     db: Session = Depends(get_db),
 ):
     if usuario.rol != "servicio_cliente":
-        raise HTTPException(status_code=403, detail="Solo servicio al cliente puede asignar una PQR")
+        raise HTTPException(status_code=403, detail="Solo servicio al cliente puede clasificar y asignar una PQR")
 
     pqr = db.query(PQR).filter(PQR.id == pqr_id).first()
     if not pqr:
@@ -144,6 +122,7 @@ def asignar_pqr(
     if not area:
         raise HTTPException(status_code=404, detail="Área no encontrada")
 
+    pqr.categoria = datos.categoria
     pqr.area_id = datos.area_id
     pqr.estado = "asignada"
 
@@ -177,6 +156,28 @@ def responder_pqr(
     return pqr
 
 
+@app.patch("/pqrs/{pqr_id}/cerrar", response_model=PQRSalida)
+def cerrar_pqr(
+    pqr_id: int,
+    usuario: Usuario = Depends(usuario_actual),
+    db: Session = Depends(get_db),
+):
+    if usuario.rol != "servicio_cliente":
+        raise HTTPException(status_code=403, detail="Solo servicio al cliente puede cerrar una PQR")
+
+    pqr = db.query(PQR).filter(PQR.id == pqr_id).first()
+    if not pqr:
+        raise HTTPException(status_code=404, detail="PQR no encontrada")
+
+    if pqr.estado != "respondida":
+        raise HTTPException(status_code=400, detail="Solo se puede cerrar una PQR que ya fue respondida")
+
+    pqr.estado = "cerrada"
+
+    db.commit()
+    db.refresh(pqr)
+    return pqr
+
 # ---------- HU5: consultar historial completo del cliente ----------
 
 @app.get("/pqrs/historial", response_model=List[PQRSalida])
@@ -201,8 +202,13 @@ def listar_pqrs(
         raise HTTPException(status_code=403, detail="No autorizado para ver todas las PQR")
 
     if usuario.rol == "area_responsable":
-        # CAMBIO: se agrega order_by
-        pqrs = db.query(PQR).filter(PQR.area_id.isnot(None)).order_by(PQR.fecha_creacion.desc()).all()
+        orden_cerradas_al_final = case((PQR.estado == "cerrada", 1), else_=0)
+        pqrs = (
+            db.query(PQR)
+            .filter(PQR.area_id.isnot(None))
+            .order_by(orden_cerradas_al_final, PQR.fecha_creacion.desc())
+            .all()
+        )
     else:
         # CAMBIO: se agrega order_by
         pqrs = db.query(PQR).order_by(PQR.fecha_creacion.desc()).all()
